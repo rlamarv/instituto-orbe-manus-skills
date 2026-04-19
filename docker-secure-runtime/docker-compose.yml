@@ -1,0 +1,60 @@
+name: instituto-orbe-secure-runtime
+
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    env_file:
+      - ../templates/.env.example
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-orbe_omie}
+      POSTGRES_USER: ${POSTGRES_USER:-orbe_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-orbe_user} -d ${POSTGRES_DB:-orbe_omie}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    networks:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    networks:
+      - backend
+
+  omie-xml-intake:
+    build:
+      context: ../omie-xml-intake
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ../templates/.env.example
+    environment:
+      PROJECT_ENV: ${PROJECT_ENV:-local}
+      XML_SOURCE_PATH: ${XML_SOURCE_PATH:-/data/xml/inbox}
+      XML_PROCESSED_PATH: ${XML_PROCESSED_PATH:-/data/xml/processed}
+      XML_REJECTED_PATH: ${XML_REJECTED_PATH:-/data/xml/rejected}
+      OMIE_TARGET_ACCOUNT_RECEIVABLE: ${OMIE_TARGET_ACCOUNT_RECEIVABLE:-CONTA_CORRENTE_EXEMPLO}
+      OMIE_TARGET_ACCOUNT_RECEIVABLE_CATEGORY: ${OMIE_TARGET_ACCOUNT_RECEIVABLE_CATEGORY:-CATEGORIA_EXEMPLO}
+      OMIE_APP_KEY: ${OMIE_APP_KEY:-preencher_localmente}
+      OMIE_APP_SECRET: ${OMIE_APP_SECRET:-preencher_localmente}
+    volumes:
+      - omie_xml_data:/data/xml
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  omie_xml_data:
