@@ -8,8 +8,10 @@ A primeira trilha de trabalho deste repositório é um projeto de ingestão e tr
 
 Para rodar o processamento de XMLs em sua estação local seguindo as melhores práticas de segurança:
 
-1.  **Prepare o ambiente:**
+1.  **Obtenha o código e prepare o ambiente:**
     ```bash
+    git clone https://github.com/rlamarv/instituto-orbe-manus-skills.git
+    cd instituto-orbe-manus-skills
     python3 -m venv venv
     source venv/bin/activate
     pip install -r requirements.txt
