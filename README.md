@@ -42,9 +42,52 @@ O primeiro projeto deve ser estruturado para receber, fora do Git, os seguintes 
 
 Neste momento, o repositório já foi criado como **área de staging segura**. A abertura pública ocorrerá após a revisão e sanitização da base sensível do projeto de origem, evitando exposição acidental de credenciais ou mocks inseguros.
 
-## Próximos passos
+## Scripts de Integração Omie
 
-A próxima etapa consiste em receber ou localizar a base do projeto de origem, avaliar itens sensíveis como `.env`, dumps, payloads, mocks, logs, notebooks e scripts auxiliares, gerar uma versão sanitizada e então publicar o primeiro projeto em formato público e compartilhável.
+### `omie-xml-intake/scripts/run_multi_base_omie_bootstrap.py`
+
+Este script é responsável por provisionar a estrutura mínima (contas correntes, categorias) e realizar um smoke test em múltiplas bases Omie. Ele espera as credenciais da API Omie via variáveis de ambiente.
+
+**Uso:**
+
+```bash
+python omie-xml-intake/scripts/run_multi_base_omie_bootstrap.py --config-file <caminho_para_config.json> [--dry-run]
+```
+
+### `omie-xml-intake/scripts/process_xml_to_omie.py`
+
+Este script processa arquivos XML de NFCom (Nota Fiscal de Comunicação) e cria contas a receber correspondentes na API da Omie. Ele utiliza as mesmas variáveis de ambiente para as credenciais da Omie e um arquivo de configuração JSON para as bases.
+
+**Uso:**
+
+```bash
+python omie-xml-intake/scripts/process_xml_to_omie.py --xml-dir <caminho_para_diretorio_xml> --config-file <caminho_para_config.json> [--dry-run]
+```
+
+**Exemplo de `config.json` para ambos os scripts:**
+
+```json
+[
+  {
+    "base_name": "Base_Principal",
+    "app_key_env": "OMIE_APP_KEY_BASE1",
+    "app_secret_env": "OMIE_APP_SECRET_BASE1",
+    "target_account_name": "Conta Corrente Principal",
+    "target_account_type": "CC",
+    "target_category_description": "Vendas de Produtos",
+    "amount": 100.50
+  },
+  {
+    "base_name": "Base_Secundaria",
+    "app_key_env": "OMIE_APP_KEY_BASE2",
+    "app_secret_env": "OMIE_APP_SECRET_BASE2",
+    "target_account_name": "Caixinha Manus",
+    "target_account_type": "CX",
+    "target_category_description": "Serviços de Consultoria",
+    "amount": 50.25
+  }
+]
+```
 
 ## Habilidade reutilizável derivada deste processo
 
