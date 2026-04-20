@@ -1,0 +1,2 @@
+requests>=2.31.0
+# xml.etree.ElementTree e json são bibliotecas padrão do Python, não precisam ser listadas aqui.
