@@ -4,6 +4,35 @@ Este repositório foi estruturado para **publicação supervisionada de código 
 
 A primeira trilha de trabalho deste repositório é um projeto de ingestão e tratamento orientado à Omie, preparado para operar com **Docker**, com geração de **DAGs do Airflow** e com bootstrap local de **Apache Superset**. O objetivo não é publicar um ambiente produtivo pronto, mas sim uma base pública segura, auditável, reproduzível e preparada para endurecimento adicional em servidores elásticos ou ambientes orquestrados.
 
+## 🚀 Guia Rápido de Execução
+
+Para rodar o processamento de XMLs em sua estação local seguindo as melhores práticas de segurança:
+
+1.  **Prepare o ambiente:**
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install -r requirements.txt
+    ```
+
+2.  **Configure seus segredos (efêmeros):**
+    ```bash
+    export OMIE_APP_KEY="SUA_CHAVE_AQUI"
+    export OMIE_APP_SECRET="SEU_SECRET_AQUI"
+    ```
+
+3.  **Ajuste o `config.json`:**
+    Certifique-se de que o campo `app_key_env` aponte para o **nome** da variável exportada (ex: `"OMIE_APP_KEY"`), e não para o valor real.
+
+4.  **Execute:**
+    ```bash
+    python3 omie-xml-intake/scripts/process_xml_to_omie.py \
+      --xml-dir ./xml_input/ \
+      --config-file config.json
+    ```
+
+*Para detalhes completos, consulte o [Guia Técnico de Execução](docs/guia-tecnico-execucao.md).*
+
 ## Princípios de publicação
 
 | Princípio | Aplicação neste repositório |
@@ -38,10 +67,6 @@ O primeiro projeto deve ser estruturado para receber, fora do Git, os seguintes 
 | API Key da Omie | Somente via ambiente local ou segredo injetado em runtime. |
 | API Secret da Omie | Somente via ambiente local ou segredo injetado em runtime. |
 
-## Estado atual
-
-Neste momento, o repositório já foi criado como **área de staging segura**. A abertura pública ocorrerá após a revisão e sanitização da base sensível do projeto de origem, evitando exposição acidental de credenciais ou mocks inseguros.
-
 ## Scripts de Integração Omie
 
 ### `omie-xml-intake/scripts/run_multi_base_omie_bootstrap.py`
@@ -62,31 +87,6 @@ Este script processa arquivos XML de NFCom (Nota Fiscal de Comunicação) e cria
 
 ```bash
 python omie-xml-intake/scripts/process_xml_to_omie.py --xml-dir <caminho_para_diretorio_xml> --config-file <caminho_para_config.json> [--dry-run]
-```
-
-**Exemplo de `config.json` para ambos os scripts:**
-
-```json
-[
-  {
-    "base_name": "Base_Principal",
-    "app_key_env": "OMIE_APP_KEY_BASE1",
-    "app_secret_env": "OMIE_APP_SECRET_BASE1",
-    "target_account_name": "Conta Corrente Principal",
-    "target_account_type": "CC",
-    "target_category_description": "Vendas de Produtos",
-    "amount": 100.50
-  },
-  {
-    "base_name": "Base_Secundaria",
-    "app_key_env": "OMIE_APP_KEY_BASE2",
-    "app_secret_env": "OMIE_APP_SECRET_BASE2",
-    "target_account_name": "Caixinha Manus",
-    "target_account_type": "CX",
-    "target_category_description": "Serviços de Consultoria",
-    "amount": 50.25
-  }
-]
 ```
 
 ## Habilidade reutilizável derivada deste processo
