@@ -1,0 +1,35 @@
+{
+  "sleep_between_bases_seconds": 0.3,
+  "bases": [
+    {
+      "base_name": "omie_homologacao_a",
+      "app_key_env": "OMIE_A_APP_KEY",
+      "app_secret_env": "OMIE_A_APP_SECRET",
+      "target_account_name": "Meta Pay - Caixinha Manus",
+      "target_account_type": "CV",
+      "target_bank_code": "999",
+      "target_account_initial_balance": 0,
+      "target_category_description": "1.110 - Receitas Manus",
+      "target_category_superior": "1.01",
+      "target_category_natureza": "Categoria de receita provisionada para automação Manus.",
+      "test_client_name": "Cliente Teste Manus Base A",
+      "test_client_email": "omie-teste@institutoorbe.invalid",
+      "amount": 1.23
+    },
+    {
+      "base_name": "omie_homologacao_b",
+      "app_key_env": "OMIE_B_APP_KEY",
+      "app_secret_env": "OMIE_B_APP_SECRET",
+      "target_account_name": "Meta Pay - Caixinha Manus",
+      "target_account_type": "CV",
+      "target_bank_code": "999",
+      "target_account_initial_balance": 0,
+      "target_category_description": "1.110 - Receitas Manus",
+      "target_category_superior": "1.01",
+      "target_category_natureza": "Categoria de receita provisionada para automação Manus.",
+      "test_client_name": "Cliente Teste Manus Base B",
+      "test_client_email": "omie-teste@institutoorbe.invalid",
+      "amount": 1.23
+    }
+  ]
+}

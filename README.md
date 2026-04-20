@@ -45,3 +45,15 @@ Neste momento, o repositório já foi criado como **área de staging segura**. A
 ## Próximos passos
 
 A próxima etapa consiste em receber ou localizar a base do projeto de origem, avaliar itens sensíveis como `.env`, dumps, payloads, mocks, logs, notebooks e scripts auxiliares, gerar uma versão sanitizada e então publicar o primeiro projeto em formato público e compartilhável.
+
+## Habilidade reutilizável derivada deste processo
+
+O fluxo consolidado de bootstrap seguro da Omie também foi formalizado como uma **skill reutilizável**, permitindo reaproveitar o processo em novas execuções sem depender apenas do histórico desta conversa.
+
+| Recurso | Local |
+| --- | --- |
+| Skill operacional | `/home/ubuntu/skills/omie-secure-bootstrap/` |
+| Espelho versionado no repositório | `skills/omie-secure-bootstrap/` |
+| Documento explicativo | `docs/omie-secure-bootstrap-skill.md` |
+
+Essa skill encapsula o padrão de smoke test em base única, bootstrap multi-base, provisionamento condicional por API, uso de credenciais efêmeras e empacotamento do resultado em documentação pública sanitizada.

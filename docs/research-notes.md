@@ -51,3 +51,17 @@ A presença de documentação dedicada a webhooks indica que o projeto pode evol
 A documentação oficial do GitHub confirma que uma organização pode exigir autenticação de dois fatores para **membros, colaboradores externos e gestores financeiros**, reforçando que a maneira correta de compartilhar administração contínua de repositórios não é dividir a conta pessoal do proprietário, mas sim delegar acesso por identidade própria dentro de uma organização controlada. A mesma documentação também esclarece que contas de automação e service accounts externas à organização precisam igualmente operar com 2FA quando a política é exigida.
 
 A documentação sobre acesso por times em repositórios de organização reforça um modelo mais governável para colaboração, no qual o acesso é concedido a **times** com níveis de permissão apropriados e pode ser herdado por times filhos. Para o contexto deste projeto, isso sustenta a recomendação de migrar a governança do repositório público para uma organização GitHub dedicada ao Instituto ORBE, mantendo o usuário como owner e adicionando outras pessoas ou agentes por times e papéis, em vez de compartilhar a conta pessoal protegida por 2FA.
+
+## Descobertas para o caso de teste transitório na Omie
+
+A referência pública de exemplos da Omie indica que, para o módulo de **Contas Correntes**, o método recomendado de listagem inicial é `PesquisarContaCorrente`. Esse achado é útil para localizar uma conta com nome operacional compatível com `caixinha` sem depender de valores hardcoded no código publicado.
+
+Na base original auditada, o script `list_omie_cenarios.py` confirma o uso do endpoint `https://app.omie.com.br/api/v1/geral/cenarios/` com a chamada `ListarCenarios`, o que permite descobrir programaticamente uma categoria ou cenário disponível para o teste sem persistir credenciais. Assim, a descoberta transitória dos parâmetros do caso de teste ficará baseada em consultas online e não em valores estáticos do repositório.
+
+## Provisionamento automático de estrutura mínima na Omie
+
+A documentação oficial da Omie para **Conta Corrente** informa que o cadastro programático usa o endpoint `https://app.omie.com.br/api/v1/geral/contacorrente/` com a chamada `IncluirContaCorrente`. O exemplo mínimo publicado pela própria Omie usa os campos `cCodCCInt`, `tipo_conta_corrente`, `codigo_banco`, `descricao` e `saldo_inicial`, e o identificador retornado para uso posterior é `nCodCC`.
+
+A documentação oficial da Omie para **Categorias** informa que o cadastro programático usa o endpoint `https://app.omie.com.br/api/v1/geral/categorias/` com a chamada `IncluirCategoria`. O exemplo mínimo publicado usa `categoria_superior`, `descricao` e `natureza`. O artigo também informa que o código da categoria superior deve ser descoberto com `ListarCategorias`, e que categorias agrupadoras aparecem com código curto no formato `X.XX`.
+
+Esses dois pontos permitem desenhar um run script multi-base que primeiro tenta descobrir por nome a conta corrente e a categoria desejadas; se não encontrar, passa a provisioná-las via API usando um conjunto mínimo de parâmetros controlados e sem persistir credenciais.

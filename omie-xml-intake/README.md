@@ -29,3 +29,25 @@ O fluxo funcional permanece dividido em três etapas. Primeiro, os XMLs são var
 ## Política de publicação
 
 Nenhum XML real, payload produtivo, log operacional, banco local, ambiente virtual ou arquivo `.env` privado faz parte deste módulo. O objetivo aqui é expor um código-fonte compreensível, extensível e auditável, não reproduzir o ambiente operacional original.
+
+## Execução multi-base com provisionamento automático
+
+O script `scripts/run_multi_base_omie_bootstrap.py` foi criado para operar em **múltiplas bases Omie** usando credenciais efêmeras, sempre informadas por variáveis de ambiente externas ao repositório. Ele percorre uma lista de bases definida em um arquivo JSON e, para cada base, executa o seguinte fluxo.
+
+Primeiro, lista as contas correntes existentes e tenta localizar a conta desejada pelo nome. Se a conta não existir, tenta criá-la com `IncluirContaCorrente`. Em seguida, lista as categorias existentes e tenta localizar a categoria desejada pelo nome. Se a categoria não existir, tenta criá-la com `IncluirCategoria`. Depois disso, cria um cliente de teste transitório e uma conta a receber mínima para validar o caminho fim a fim.
+
+O arquivo `templates/multi-base-config.example.json` mostra o formato esperado da configuração. Nele, cada base referencia apenas os nomes das variáveis de ambiente que conterão `app_key` e `app_secret`, sem expor segredos no código.
+
+Um exemplo de execução é o seguinte:
+
+```bash
+export OMIE_A_APP_KEY='preencher_em_runtime'
+export OMIE_A_APP_SECRET='preencher_em_runtime'
+export OMIE_B_APP_KEY='preencher_em_runtime'
+export OMIE_B_APP_SECRET='preencher_em_runtime'
+
+python3.11 scripts/run_multi_base_omie_bootstrap.py \
+  --config-file templates/multi-base-config.example.json
+```
+
+Se você quiser apenas verificar o que seria criado em cada base, sem enviar chamadas de inclusão, utilize `--dry-run`.
