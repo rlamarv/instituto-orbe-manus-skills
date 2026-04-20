@@ -2,6 +2,8 @@
 
 Este repositório foi estruturado para **publicação supervisionada de código sanitizado por IA** no contexto do Instituto ORBE, com foco em integrações de dados que precisem permanecer públicas sem expor credenciais, arquivos `.env`, cargas de teste inseguras, segredos operacionais ou dados sensíveis de terceiros.
 
+Este projeto integra-se ao [Omie.ERP][omie].
+
 ---
 
 ### ⚠️ Disclaimer Experimental
@@ -11,19 +13,20 @@ Este é um **projeto experimental** em estágio de desenvolvimento. O código é
 
 ## 📑 Índice Navegável
 
-1.  [🚀 Guia Rápido: Importação de Contas a Receber via XML (NFCom)](#-guia-rápido-importação-de-contas-a-receber-via-xml-nfcom)
+1.  [🚀 Guia Rápido: Importação de Contas a Receber via XML (NFCom) no Omie.ERP](#-guia-rápido-importação-de-contas-a-receber-via-xml-nfcom-no-omieerp)
 2.  [⚖️ Licença](#️-licença)
 3.  [🏗️ Princípios de Publicação](#️-princípios-de-publicação)
 4.  [📂 Estrutura Inicial](#-estrutura-inicial)
 5.  [⚙️ Parâmetros Funcionais](#️-parâmetros-funcionais)
 6.  [📜 Scripts de Integração Omie](#-scripts-de-integração-omie)
 7.  [🧠 Habilidade Reutilizável (Skill)](#-habilidade-reutilizável-skill)
+8.  [🔗 Referências e Avisos Legais](#-referências-e-avisos-legais)
 
 ---
 
-## 🚀 Guia Rápido: Importação de Contas a Receber via XML (NFCom)
+## 🚀 Guia Rápido: Importação de Contas a Receber via XML (NFCom) no Omie.ERP
 
-Siga estes passos para processar Notas Fiscais de Comunicação (NFCom) e gerar lançamentos na Omie com segurança:
+Siga estes passos para processar Notas Fiscais de Comunicação (NFCom) e gerar lançamentos no [Omie.ERP][omie] com segurança:
 
 1.  **Obtenha o código e prepare o ambiente:**
     ```bash
@@ -142,3 +145,15 @@ O fluxo consolidado de bootstrap seguro da Omie também foi formalizado como uma
 | Skill operacional | `/home/ubuntu/skills/omie-secure-bootstrap/` |
 | Espelho versionado no repositório | `skills/omie-secure-bootstrap/` |
 | Documento explicativo | `docs/omie-secure-bootstrap-skill.md` |
+
+---
+
+## 🔗 Referências e Avisos Legais
+
+### Referências
+- **Omie.ERP** – [https://www.omie.com.br/](https://www.omie.com.br/)
+
+### Aviso Legal
+Omie.ERP é uma marca registrada de seus respectivos proprietários. Este projeto é uma iniciativa independente do Instituto ORBE e **não possui afiliação oficial** com a Omie.
+
+[omie]: https://www.omie.com.br/
