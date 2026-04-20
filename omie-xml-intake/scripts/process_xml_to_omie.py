@@ -36,10 +36,17 @@ class OmieClient:
             "app_secret": self.app_secret,
             "param": [payload],
         }
-        if self.dry_run and call.startswith("Incluir"):
+        if self.dry_run:
             print(f"DRY RUN: {call} - {payload}")
-            return {"codigo_status": "0", "descricao_status": f"DRY RUN {call}", "call": call, "payload": payload}
-        
+            if call == "ListarContasCorrentes":
+                return {"conta_corrente_cadastro": [{"nCodCC": 12345, "descricao": "Conta Corrente Teste XML", "tipo_conta_corrente": "CC"}], "total_de_paginas": 1}
+            if call == "ListarCategorias":
+                return {"categorias_cadastro": [{"codigo": "1.01.00001", "descricao": "Recebimentos de NFCom"}], "total_de_paginas": 1}
+            if call.startswith("Incluir") or call.startswith("Upsert"):
+                if call == "UpsertClienteCpfCnpj":
+                    return {"codigo_status": "0", "descricao_status": f"DRY RUN {call}", "call": call, "payload": payload, "codigo_cliente_omie": 999999}
+                return {"codigo_status": "0", "descricao_status": f"DRY RUN {call}", "call": call, "payload": payload}
+            # Para outras chamadas em dry-run, ainda pode ser necessário um mock mais específico ou falh            raise NotImplementedError(f"DRY RUN para call '{call}' não implementado.")        
         response = requests.post(url, json=body, timeout=REQUEST_TIMEOUT)
         try:
             response.raise_for_status()
@@ -172,6 +179,9 @@ def include_receivable(
     return client.post(CONTAS_RECEBER_URL, "IncluirContaReceber", payload)
 
 def parse_nfcom_xml(xml_path: str) -> Dict[str, Any]:
+    # Registrar o namespace para evitar prefixos como ns0:
+    ET.register_namespace("", NS["nfcom"])
+
     tree = ET.parse(xml_path)
     root = tree.getroot()
 
@@ -305,5 +315,4 @@ def main():
                     print(f"    Erro ao processar {xml_file}: {e}")
 
 if __name__ == "__main__":
-    main()
     main()
