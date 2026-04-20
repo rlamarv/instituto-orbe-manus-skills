@@ -4,9 +4,9 @@ Este repositório foi estruturado para **publicação supervisionada de código 
 
 A primeira trilha de trabalho deste repositório é um projeto de ingestão e tratamento orientado à Omie, preparado para operar com **Docker**, com geração de **DAGs do Airflow** e com bootstrap local de **Apache Superset**. O objetivo não é publicar um ambiente produtivo pronto, mas sim uma base pública segura, auditável, reproduzível e preparada para endurecimento adicional em servidores elásticos ou ambientes orquestrados.
 
-## 🚀 Guia Rápido de Execução
+## 🚀 Guia Rápido: Importação de Contas a Receber via XML (NFCom)
 
-Para rodar o processamento de XMLs em sua estação local seguindo as melhores práticas de segurança:
+Siga estes passos para processar Notas Fiscais de Comunicação (NFCom) e gerar lançamentos na Omie com segurança:
 
 1.  **Obtenha o código e prepare o ambiente:**
     ```bash
@@ -17,23 +17,44 @@ Para rodar o processamento de XMLs em sua estação local seguindo as melhores p
     pip install -r requirements.txt
     ```
 
-2.  **Configure seus segredos (efêmeros):**
+2.  **Prepare seus dados de entrada:**
+    Crie uma pasta para seus XMLs e coloque os arquivos `.xml` nela:
+    ```bash
+    mkdir xml_input
+    # Copie seus arquivos NFCom para a pasta xml_input/
+    ```
+
+3.  **Configure seus segredos (efêmeros):**
+    Exporte suas chaves da Omie como variáveis de ambiente no terminal:
     ```bash
     export OMIE_APP_KEY="SUA_CHAVE_AQUI"
     export OMIE_APP_SECRET="SEU_SECRET_AQUI"
     ```
 
-3.  **Ajuste o `config.json`:**
-    Certifique-se de que o campo `app_key_env` aponte para o **nome** da variável exportada (ex: `"OMIE_APP_KEY"`), e não para o valor real.
+4.  **Crie seu `config.json` (SAMPLE):**
+    Crie um arquivo chamado `config.json` na raiz do projeto com este conteúdo, garantindo que `app_key_env` aponte para o **nome** da variável exportada:
+    ```json
+    [
+      {
+        "base_name": "Minha Base Omie",
+        "app_key_env": "OMIE_APP_KEY",
+        "app_secret_env": "OMIE_APP_SECRET",
+        "target_account_name": "Meta Pay - Caixinha Manus",
+        "target_account_type": "CC",
+        "target_category_description": "Recebimentos de NFCom",
+        "amount": 1.00
+      }
+    ]
+    ```
 
-4.  **Execute:**
+5.  **Execute a importação:**
     ```bash
     python3 omie-xml-intake/scripts/process_xml_to_omie.py \
       --xml-dir ./xml_input/ \
       --config-file config.json
     ```
 
-*Para detalhes completos, consulte o [Guia Técnico de Execução](docs/guia-tecnico-execucao.md).*
+*Para detalhes completos e avançados, consulte o [Guia Técnico de Execução](docs/guia-tecnico-execucao.md).*
 
 ## Princípios de publicação
 
