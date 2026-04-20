@@ -2,7 +2,24 @@
 
 Este repositório foi estruturado para **publicação supervisionada de código sanitizado por IA** no contexto do Instituto ORBE, com foco em integrações de dados que precisem permanecer públicas sem expor credenciais, arquivos `.env`, cargas de teste inseguras, segredos operacionais ou dados sensíveis de terceiros.
 
-A primeira trilha de trabalho deste repositório é um projeto de ingestão e tratamento orientado à Omie, preparado para operar com **Docker**, com geração de **DAGs do Airflow** e com bootstrap local de **Apache Superset**. O objetivo não é publicar um ambiente produtivo pronto, mas sim uma base pública segura, auditável, reproduzível e preparada para endurecimento adicional em servidores elásticos ou ambientes orquestrados.
+---
+
+### ⚠️ Disclaimer Experimental
+Este é um **projeto experimental** em estágio de desenvolvimento. O código é fornecido "COMO ESTÁ" (AS IS), sem garantias de qualquer tipo, expressas ou implícitas. O uso deste software é de total responsabilidade do usuário. O Instituto ORBE não se responsabiliza por quaisquer danos ou perdas decorrentes do uso deste código.
+
+---
+
+## 📑 Índice Navegável
+
+1.  [🚀 Guia Rápido: Importação de Contas a Receber via XML (NFCom)](#-guia-rápido-importação-de-contas-a-receber-via-xml-nfcom)
+2.  [⚖️ Licença](#️-licença)
+3.  [🏗️ Princípios de Publicação](#️-princípios-de-publicação)
+4.  [📂 Estrutura Inicial](#-estrutura-inicial)
+5.  [⚙️ Parâmetros Funcionais](#️-parâmetros-funcionais)
+6.  [📜 Scripts de Integração Omie](#-scripts-de-integração-omie)
+7.  [🧠 Habilidade Reutilizável (Skill)](#-habilidade-reutilizável-skill)
+
+---
 
 ## 🚀 Guia Rápido: Importação de Contas a Receber via XML (NFCom)
 
@@ -56,7 +73,25 @@ Siga estes passos para processar Notas Fiscais de Comunicação (NFCom) e gerar 
 
 *Para detalhes completos e avançados, consulte o [Guia Técnico de Execução](docs/guia-tecnico-execucao.md).*
 
-## Princípios de publicação
+---
+
+## ⚖️ Licença
+
+Este projeto está licenciado sob a **MIT License**.
+
+> **MIT License**
+>
+> Copyright (c) 2026 Instituto ORBE
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+>
+> The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+>
+> THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+---
+
+## 🏗️ Princípios de Publicação
 
 | Princípio | Aplicação neste repositório |
 | --- | --- |
@@ -66,7 +101,7 @@ Siga estes passos para processar Notas Fiscais de Comunicação (NFCom) e gerar 
 | Reprodutibilidade | O repositório prioriza templates, exemplos mínimos e documentação explícita de bootstrap. |
 | Evolução segura | O código público deve permitir extensão futura para Airflow, Superset, webhooks e orquestração sem refatoração destrutiva. |
 
-## Estrutura inicial
+## 📂 Estrutura Inicial
 
 | Pasta | Finalidade |
 | --- | --- |
@@ -78,7 +113,7 @@ Siga estes passos para processar Notas Fiscais de Comunicação (NFCom) e gerar 
 | `docs/` | Documentação de arquitetura, segurança, sanitização e operação. |
 | `templates/` | Modelos públicos de configuração e arquivos de exemplo. |
 
-## Parâmetros funcionais do primeiro projeto
+## ⚙️ Parâmetros Funcionais
 
 O primeiro projeto deve ser estruturado para receber, fora do Git, os seguintes parâmetros operacionais:
 
@@ -90,29 +125,15 @@ O primeiro projeto deve ser estruturado para receber, fora do Git, os seguintes 
 | API Key da Omie | Somente via ambiente local ou segredo injetado em runtime. |
 | API Secret da Omie | Somente via ambiente local ou segredo injetado em runtime. |
 
-## Scripts de Integração Omie
+## 📜 Scripts de Integração Omie
 
 ### `omie-xml-intake/scripts/run_multi_base_omie_bootstrap.py`
-
-Este script é responsável por provisionar a estrutura mínima (contas correntes, categorias) e realizar um smoke test em múltiplas bases Omie. Ele espera as credenciais da API Omie via variáveis de ambiente.
-
-**Uso:**
-
-```bash
-python omie-xml-intake/scripts/run_multi_base_omie_bootstrap.py --config-file <caminho_para_config.json> [--dry-run]
-```
+Provisiona estrutura mínima (contas correntes, categorias) e realiza smoke test em múltiplas bases Omie.
 
 ### `omie-xml-intake/scripts/process_xml_to_omie.py`
+Processa arquivos XML de NFCom e cria contas a receber correspondentes na API da Omie.
 
-Este script processa arquivos XML de NFCom (Nota Fiscal de Comunicação) e cria contas a receber correspondentes na API da Omie. Ele utiliza as mesmas variáveis de ambiente para as credenciais da Omie e um arquivo de configuração JSON para as bases.
-
-**Uso:**
-
-```bash
-python omie-xml-intake/scripts/process_xml_to_omie.py --xml-dir <caminho_para_diretorio_xml> --config-file <caminho_para_config.json> [--dry-run]
-```
-
-## Habilidade reutilizável derivada deste processo
+## 🧠 Habilidade Reutilizável (Skill)
 
 O fluxo consolidado de bootstrap seguro da Omie também foi formalizado como uma **skill reutilizável**, permitindo reaproveitar o processo em novas execuções sem depender apenas do histórico desta conversa.
 
@@ -121,5 +142,3 @@ O fluxo consolidado de bootstrap seguro da Omie também foi formalizado como uma
 | Skill operacional | `/home/ubuntu/skills/omie-secure-bootstrap/` |
 | Espelho versionado no repositório | `skills/omie-secure-bootstrap/` |
 | Documento explicativo | `docs/omie-secure-bootstrap-skill.md` |
-
-Essa skill encapsula o padrão de smoke test em base única, bootstrap multi-base, provisionamento condicional por API, uso de credenciais efêmeras e empacotamento do resultado em documentação pública sanitizada.
